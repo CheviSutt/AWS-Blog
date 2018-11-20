@@ -1,0 +1,22 @@
+<mat-spinner *ngIf="loadingSpinner"></mat-spinner>
+<mat-accordion multi="true" *ngIf="posts.length > 0 && !loadingSpinner"> <!--Multi="true" allows multiple posts to be open-->
+  <mat-expansion-panel *ngFor="let post of posts">
+    <mat-expansion-panel-header>
+      <p>{{post.title}}</p>
+    </mat-expansion-panel-header>
+    <div class="post-image">
+      <img [src]="post.imagePath" [alt]="post.title">
+    </div>
+    <p>{{post.content}}</p>
+    <mat-action-row *ngIf="userIsAuthenticated && userId === post.creator">
+      <a mat-button color="primary" [routerLink]="['/edit', post.id]">EDIT</a> <!--Router link accesses the post in posts-->
+      <button mat-button color="accent" (click)="postDelete(post.id)">DELETE</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+<!--length is bind'ed/bound to posts-currPosts.ts-->
+<!--(page)="onChangedPage($event)" is the event listener-->
+<mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="postsAmountSelect" (page)="onChangedPage($event)"
+*ngIf="posts.length >= 0 "></mat-paginator>
+<p class="blog-text mat-body-1" *ngIf="posts.length <= 0 && !loadingSpinner">I feel lonely, No one has posted yet.</p>
+
